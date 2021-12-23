@@ -104,7 +104,7 @@ public class Main {
         //trip에 현재 노드의 일렬 번호를 추가
         locInTrip[here] = trip.size();
         trip.add(no2serial[here]);
-        //모든 자식 노들르 방문
+        //모든 자식 노드를 방문
         for (int i = 0; i < child[here].size(); i++) {
             traverse(child[here].get(i), dep + 1, trip);
             //자식 노드를 방문하고 현재 노드로 들어올 때마다 다시 추가
