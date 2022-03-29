@@ -2,71 +2,70 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
+    static int T = 0;
+    static int M = 0;
+    static int N = 0;
+    static int K = 0;
+    static int cnt = 0;
+    static int[] dx = {1, 0, -1, 0};
+    static int[] dy = {0, 1, 0, -1};
+    static boolean[][] land;
+    static boolean[][] visit;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        T = Integer.parseInt(br.readLine());
+        for (int t = 0;t<T;t++ ) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            M = Integer.parseInt(st.nextToken());
+            N = Integer.parseInt(st.nextToken());
+            K = Integer.parseInt(st.nextToken());
+            land = new boolean[M][N];
+            visit = new boolean[M][N];
+            cnt = 0;
 
-	static int M, N, K;
-	static int[][] cabbage;
-	static boolean[][] visit;
-	static int count;
-	static int[] dx = { 0, -1, 0, 1 };
-	static int[] dy = { 1, 0, -1, 0 };
+            for (int k = 0; k<K;k++) {
+                st = new StringTokenizer(br.readLine());
+                int i=Integer.parseInt(st.nextToken());
+                int j=Integer.parseInt(st.nextToken());
+                land[i][j] = true;
+            }
+            // System.out.println(Arrays.deepToString(land));
+            for (int i =0;i<M;i++) {
+                for (int j = 0;j<N;j++) {
+                    if(land[i][j] == true && !visit[i][j]){
+                        bfs(i, j);
+                        cnt++;
+                    }
+                }
+            }
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
-		int T = Integer.parseInt(br.readLine());
+            System.out.println(cnt);
+        }
 
-		for (int c = 0; c < T; c++) {
-			StringTokenizer st = new StringTokenizer(br.readLine()," ");
-			 M = Integer.parseInt(st.nextToken());
-			 N = Integer.parseInt(st.nextToken());
-			 K = Integer.parseInt(st.nextToken());
-			cabbage = new int[M][N];
-			visit = new boolean[M][N];
-			count=0;
+    }
 
-			for (int i = 0; i < K; i++) {
-				st=new StringTokenizer(br.readLine()," ");
-				int p1 = Integer.parseInt(st.nextToken());
-				int p2 = Integer.parseInt(st.nextToken());
-				cabbage[p1][p2] = 1;
+    public static void bfs(int start, int end){
+        Queue<int []> q = new LinkedList<>();
+        q.add(new int[] {start, end});
 
-			}
+        while (!q.isEmpty()){
+            start = q.peek()[0];
+            end = q.peek()[1];
+            visit[start][end] = true;
+            q.poll();
+            for(int i= 0; i<4;i++){
+                int x = start + dx[i];
+                int y = end + dy[i];
 
-			for (int i = 0; i < M; i++) {
-				for (int j = 0; j < N; j++) {
-					if (cabbage[i][j] == 1 && !visit[i][j]) {
-						bfs(i, j);
-						count++;
-					}
-				}
-			}
-			System.out.println(count);
-		}
-		
-	}
-  
-  static void bfs(int x, int y) {
-		Queue<int[]> qu = new LinkedList<int[]>();
-		qu.add(new int[] { x, y });
+                if(x>=0 && y>=0 && x<M &&y<N){
+                    if(land[x][y]== true
+                            && !visit[x][y]){
+                        q.add(new int[] {x, y});
+                        visit[x][y] = true;
+                    }
+                }
 
-		while (!qu.isEmpty()) {
-			x = qu.peek()[0];
-			y = qu.peek()[1];
-			visit[x][y] = true;
-			qu.poll();
-			for (int i = 0; i < 4; i++) {
-				int cx = x + dx[i];
-				int cy = y + dy[i];
-
-				if (cx >= 0 && cy >= 0 && cx < M && cy < N) {
-					if (!visit[cx][cy] && cabbage[cx][cy] == 1) {
-						qu.add(new int[] { cx, cy });
-						visit[cx][cy] = true;
-					}
-				}
-
-			}
-
-		}
-	}
+            }
+        }
+    }
 }
